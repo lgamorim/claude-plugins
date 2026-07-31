@@ -1,0 +1,17 @@
+{
+  "name": "lgamorim-plugins",
+  "owner": {
+    "name": "Luís Amorim",
+    "url": "https://github.com/lgamorim"
+  },
+  "metadata": {
+    "description": "Reusable Claude Code plugins: personas, commands and tooling, installed per project."
+  },
+  "plugins": [
+    {
+      "name": "dotnet-personas",
+      "source": "./dotnet-personas",
+      "description": "Spec-first .NET/C# development chain: spec-writer, software-architect, backend-engineer, quality-assurance, plus the /feature orchestrator."
+    }
+  ]
+}

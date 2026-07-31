@@ -1,0 +1,9 @@
+{
+  "name": "dotnet-personas",
+  "description": "Spec-first .NET/C# personas that hand off through OpenSpec artifacts, with machine-checkable gates between phases.",
+  "author": {
+    "name": "Luís Amorim",
+    "url": "https://github.com/lgamorim"
+  },
+  "keywords": ["dotnet", "csharp", "openspec", "spec-driven", "personas"]
+}
