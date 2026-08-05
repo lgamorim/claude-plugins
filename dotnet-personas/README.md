@@ -5,9 +5,17 @@ artifacts on disk rather than through conversation
 context.
 
     description → spec-writer        → proposal.md, spec deltas, tasks.md
-                → software-architect → design.md, waved tasks.md
-                → backend-engineer   → source, tests
+                → software-architect → design.md, waved + tagged tasks.md
+                → engineers          → source, tests
                 → quality-assurance  → tests, verification.md
+
+Implementation is routed per task: the architect tags
+each task `[backend]`, `[aspnet]` (server-rendered MVC /
+Razor Pages) or `[blazor]`, and the orchestrator
+delegates it to the matching engineer persona. An
+untagged task is treated as a plan defect: untagged UI
+work bounces back to the architect; anything else
+routes to `backend-engineer`, flagged at the wave gate.
 
 Each handoff has a machine-checkable gate:
 `openspec validate --strict` after the spec and again
@@ -22,6 +30,8 @@ wave.
 | `spec-writer` | agent | opus / max | `openspec/changes/<id>/` only |
 | `software-architect` | agent | opus / max | `design.md`, `tasks.md` only |
 | `backend-engineer` | agent | opus / high | source + tests in assigned files |
+| `aspnet-engineer` | agent | opus / high | source + tests in assigned files |
+| `blazor-engineer` | agent | opus / high | source + tests in assigned files |
 | `quality-assurance` | agent | fable / max | tests + `verification.md` only |
 | `/dotnet-personas:feature` | command | n/a (orchestrates) | promotes + validates winning design, materialises its ADRs, ticks `tasks.md`, commits waves |
 

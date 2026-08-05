@@ -65,10 +65,20 @@ Phase 2 — DESIGN (parallel, then synthesize)
 
 Phase 3 — IMPLEMENT (parallel where waves allow)
   Read tasks.md. For each wave, delegate independent
-  tasks to separate backend-engineer subagents in one
-  turn — one agent per task, each told its exact task
-  numbers and owned files. Tasks touching the same file
-  are never parallelised.
+  tasks to separate engineer subagents in one turn —
+  one agent per task, routed by the task's persona tag:
+  [backend] → backend-engineer, [aspnet] →
+  aspnet-engineer, [blazor] → blazor-engineer. An
+  untagged task is a defect in tasks.md, not a routing
+  case: if its files include UI files (.cshtml,
+  .razor, wwwroot/), send it BACKWARD to the
+  software-architect for tagging, like any other
+  upstream defect; otherwise route it to
+  backend-engineer and flag the missing tag to the
+  user at the wave gate. Each agent is told its exact
+  task numbers and owned files. Tasks touching the
+  same file are never parallelised, even across
+  different personas.
   Gate: `dotnet build` with zero warnings and
   `dotnet test` green, verified by running them
   yourself, not by trusting agent reports — an

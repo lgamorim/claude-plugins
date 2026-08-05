@@ -79,14 +79,35 @@ with no task is a gap in your plan, not in the spec.
 Format:
 
     ## Wave 1 (parallel-safe)
-    - [ ] 1.1 ... (files: src/A/Foo.cs)
-    - [ ] 1.2 ... (files: src/B/Bar.cs)
+    - [ ] 1.1 [backend] ... (files: src/A/Foo.cs)
+    - [ ] 1.2 [aspnet] ... (files: src/Web/Pages/Bar.cshtml)
     ## Wave 2 (depends on Wave 1)
-    - [ ] 2.1 ...
+    - [ ] 2.1 [blazor] ...
 
 Two tasks in the same wave MUST NOT touch the same file.
 Name the files each task owns — the orchestrator uses
 this to parallelise safely.
+
+Tag every task with the engineer persona that executes
+it: `[backend]` for APIs, domain and infrastructure,
+`[aspnet]` for server-rendered MVC / Razor Pages UI,
+`[blazor]` for Blazor components and pages. Work that
+serves exactly one UI stack takes that stack's tag
+even when the file is not a view or component —
+Blazor hosting wiring in `Program.cs` is `[blazor]`,
+a stylesheet only MVC views load is `[aspnet]`.
+Assets both UI stacks share go to either UI tag —
+pick one; the tag must be explicit, never inferred.
+An untagged task is a plan defect, not shorthand for
+`[backend]`: the orchestrator bounces untagged UI
+work back to you and flags any other missing tag at
+the wave gate. When the change includes Blazor work,
+render modes are Decisions in design.md with rejected
+alternatives — for every component or page the change
+adds, and for every existing one whose render mode it
+alters. One blanket Decision may cover a set of
+components; name its exceptions. A render mode is
+never an implementation detail left to the engineer.
 
 Every wave boundary is a commit point: after each wave
 the orchestrator runs `dotnet build` (zero warnings)

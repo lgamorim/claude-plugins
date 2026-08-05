@@ -17,8 +17,9 @@ The first plugin, `dotnet-personas`, encodes a
 
     feature description
       → spec-writer         (product owner: OpenSpec change proposal)
-      → software-architect  (design + waved execution plan)
-      → backend-engineer    (implementation, parallel per wave)
+      → software-architect  (design + waved, persona-tagged execution plan)
+      → engineers           (implementation, parallel per wave, routed
+                             per task tag: backend / aspnet / blazor)
       → quality-assurance   (adversarial verification)
 
 Three design commitments shape everything in this repo:
@@ -60,6 +61,9 @@ single runs thinking longer.
     claude-plugins/
     ├── .claude-plugin/
     │   └── marketplace.json          # the catalog
+    ├── .github/
+    │   └── workflows/
+    │       └── checks.yml            # persona drift check on push/PR
     ├── dotnet-personas/
     │   ├── .claude-plugin/
     │   │   └── plugin.json
@@ -67,10 +71,14 @@ single runs thinking longer.
     │   │   ├── spec-writer.md
     │   │   ├── software-architect.md
     │   │   ├── backend-engineer.md
+    │   │   ├── aspnet-engineer.md
+    │   │   ├── blazor-engineer.md
     │   │   └── quality-assurance.md
     │   ├── commands/
     │   │   └── feature.md            # /dotnet-personas:feature
     │   └── README.md
+    ├── scripts/
+    │   └── check-persona-drift.sh    # persona consistency gate
     ├── LICENSE                       # Apache-2.0
     └── README.md
 
@@ -78,7 +86,7 @@ single runs thinking longer.
 
 | Plugin | Contents |
 |---|---|
-| `dotnet-personas` | spec-writer, software-architect, backend-engineer, quality-assurance, `/feature` orchestrator |
+| `dotnet-personas` | spec-writer, software-architect, backend-engineer, aspnet-engineer, blazor-engineer, quality-assurance, `/feature` orchestrator |
 
 ## Model and effort strategy
 
@@ -90,6 +98,8 @@ inputs**, not how important the phase is.
 | spec-writer | opus | max | Open-ended: turns prose into requirements; most leveraged artifact in the chain |
 | software-architect | opus | max | Open-ended: decisions with rejected alternatives; run 3× in parallel with competing briefs |
 | backend-engineer | opus | high | Closed-ended: executes an approved plan. Deliberately NOT max — surplus reasoning re-litigates settled decisions and invites scope creep. If this persona needs max effort to succeed, the architect phase is under-delivering |
+| aspnet-engineer | opus | high | Closed-ended executor, same rationale as backend-engineer; differs only in domain (server-rendered MVC / Razor Pages UI) |
+| blazor-engineer | opus | high | Closed-ended executor, same rationale as backend-engineer; differs only in domain (Blazor components — render modes are fixed by the design, never chosen here) |
 | quality-assurance | fable | max | Adversarial falsification; run 2× with different briefs. Model deliberately differs from backend-engineer so verifier and implementer do not share blind spots |
 
 Config caveats (verify once per machine):
@@ -129,7 +139,7 @@ In a Claude Code session inside the consuming repo:
     /plugin marketplace add lgamorim/claude-plugins
     /plugin install dotnet-personas
 
-Confirm with `/agents` — the four personas should list
+Confirm with `/agents` — the six personas should list
 with their models. Later, to pull persona improvements:
 
     /plugin marketplace update lgamorim-plugins
@@ -178,6 +188,18 @@ its own description.
 
     claude --plugin-dir ./dotnet-personas   # try without installing
     claude plugin validate .                # validate marketplace + plugin
+    sh scripts/check-persona-drift.sh       # persona consistency gate
+
+Agent files cannot include shared content, so the
+engineer personas carry verbatim copies of their
+Process, Rules and Report back sections, and the two
+frontend personas share their Domain rules preamble
+word for word. The drift check fails when any copy
+diverges, or when an engineer's task tag is not wired
+into the architect, the orchestrator and the plugin
+README — adding an engineer persona means satisfying
+it for the new tag. CI runs it on every push and pull
+request.
 
 ## Known limitations, by design
 

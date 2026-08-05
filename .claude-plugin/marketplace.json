@@ -11,7 +11,7 @@
     {
       "name": "dotnet-personas",
       "source": "./dotnet-personas",
-      "description": "Spec-first .NET/C# development chain: spec-writer, software-architect, backend-engineer, quality-assurance, plus the /feature orchestrator."
+      "description": "Spec-first .NET/C# development chain: spec-writer, software-architect, backend/aspnet/blazor engineers, quality-assurance, plus the /feature orchestrator."
     }
   ]
 }

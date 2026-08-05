@@ -50,6 +50,13 @@ falsify.
   default — v8+ is commercially licensed, and adopting
   a paid dependency is the project's decision, not
   yours.
+- For UI scenarios the unit stack cannot reach, the
+  same fallbacks the engineer personas carry:
+  `WebApplicationFactory` integration tests for
+  server-rendered pages, bUnit for Blazor components,
+  both running under `dotnet test`. A scenario is
+  Unverifiable for want of tooling only once these
+  are ruled out too.
 - Test observable behaviour, not implementation. Stub
   only genuine external boundaries — database, network,
   filesystem, clock, randomness — through the owned
